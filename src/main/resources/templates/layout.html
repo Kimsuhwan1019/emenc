@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(주)이엠이앤씨</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <nav class="navbar">
+        <!-- 로고 (지금은 텍스트) -->
+        <a class="brand" th:href="@{/}">(주)이엠이앤씨</a>
+
+        <!-- 메뉴 -->
+        <ul class="menu">
+            <li><a th:href="@{/}">홈</a></li>
+            <li><a th:href="@{/greeting}">인사말</a></li>
+            <li><a th:href="@{/store}">매장소개</a></li>
+            <li><a th:href="@{/location}">오시는길</a></li>
+            <li><a th:href="@{/inquiry}">견적문의</a></li>
+            <li><a th:href="@{/board}">자유게시판</a></li>
+        </ul>
+
+        <!-- 로그인 상태 분기 -->
+        <div class="auth">
+            <!-- 비로그인 -->
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/user/signin}">로그인</a>
+                <a th:href="@{/user/signup}">회원가입</a>
+            </span>
+            <!-- 로그인 -->
+            <span sec:authorize="isAuthenticated()">
+                <span><span sec:authentication="name">사용자</span>님 환영합니다</span>
+                <!-- 로그아웃은 POST (CSRF 토큰은 시큐리티가 자동 삽입) -->
+                <form th:action="@{/user/logout}" method="post" class="logout-form">
+                    <button type="submit">로그아웃</button>
+                </form>
+            </span>
+        </div>
+    </nav>
+</header>
+
+<!-- 각 페이지 본문이 이 자리에 들어옴 -->
+<main class="content" layout:fragment="content">
+</main>
+
+<footer class="site-footer">
+    <small>&copy; (주)이엠이앤씨</small>
+</footer>
+</body>
+</html>

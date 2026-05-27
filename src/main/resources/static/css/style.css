@@ -1,0 +1,28 @@
+/* 최소 기본 스타일 (디자인은 추후 별도 적용) */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; color: #222; }
+
+/* 상단 네비게이션 */
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 24px;
+    border-bottom: 1px solid #ddd;
+}
+.brand { font-weight: bold; text-decoration: none; color: #222; }
+.menu { display: flex; gap: 16px; list-style: none; margin: 0; padding: 0; }
+.menu a { text-decoration: none; color: #333; }
+.auth { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.logout-form { display: inline; margin: 0; }
+
+/* 본문 / 푸터 */
+.content { padding: 24px; min-height: 60vh; }
+.site-footer { padding: 16px 24px; border-top: 1px solid #ddd; color: #888; }
+
+/* 폼 */
+.form-row { margin-bottom: 12px; }
+.form-row label { display: block; margin-bottom: 4px; }
+.field-error { color: #c0392b; font-size: 0.9em; margin-top: 4px; }
+.form-errors { color: #c0392b; margin-bottom: 12px; }
+.form-info { color: #2c7; margin-bottom: 12px; }
