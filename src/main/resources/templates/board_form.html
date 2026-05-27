@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <h2>글 작성/수정</h2>
+
+    <!-- actionUrl로 작성(/board/create) 또는 수정(/board/modify/{id}) 전송, CSRF 자동 삽입 -->
+    <form th:action="@{${actionUrl}}" th:object="${freeBoardForm}" method="post">
+        <div class="form-row">
+            <label for="subject">제목</label>
+            <input type="text" th:field="*{subject}" id="subject">
+            <div class="field-error" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></div>
+        </div>
+        <div class="form-row">
+            <label for="content">내용</label>
+            <textarea th:field="*{content}" id="content" rows="10"></textarea>
+            <div class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+        </div>
+        <button type="submit">저장</button>
+        <a th:href="@{/board/list}">취소</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <h2>자유게시판</h2>
+
+    <!-- 로그인 시에만 글쓰기 버튼 -->
+    <div sec:authorize="isAuthenticated()" class="board-actions">
+        <a th:href="@{/board/create}">글쓰기</a>
+    </div>
+
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(boardList)}">
+            <td colspan="3">등록된 글이 없습니다.</td>
+        </tr>
+        <tr th:each="board : ${boardList}">
+            <td>
+                <a th:href="@{|/board/${board.id}|}" th:text="${board.subject}">제목</a>
+            </td>
+            <td th:text="${board.author != null ? board.author.username : '-'}">작성자</td>
+            <td th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}">작성일</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

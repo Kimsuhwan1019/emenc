@@ -39,10 +39,5 @@ public class MainController {
         return "prepare";
     }
 
-    // 자유게시판 (다음 단계 구현 예정 - 준비 중 안내)
-    @GetMapping("/board")
-    public String board(Model model) {
-        model.addAttribute("pageTitle", "자유게시판");
-        return "prepare";
-    }
+    // 자유게시판(/board)은 FreeBoardController가 담당
 }

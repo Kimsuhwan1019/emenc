@@ -22,11 +22,16 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // 정적 리소스 허용
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico").permitAll()
-                // 공개 페이지 허용
+                // 공개 페이지 허용 (/error: 비로그인도 404/500 등 오류 페이지 열람 가능)
                 .requestMatchers("/", "/user/signup", "/user/signin",
-                        "/greeting", "/store", "/location").permitAll()
+                        "/greeting", "/store", "/location", "/error").permitAll()
                 // H2 콘솔 허용
                 .requestMatchers("/h2-console/**").permitAll()
+                // 게시판: 글쓰기/수정/삭제/댓글은 인증 필요 (목록·상세보다 먼저 평가)
+                .requestMatchers("/board/create", "/board/modify/**",
+                        "/board/delete/**", "/board/comment/**").authenticated()
+                // 게시판: 목록·상세 조회는 비로그인도 허용
+                .requestMatchers("/board", "/board/list", "/board/{id}").permitAll()
                 // 그 외는 인증 필요
                 .anyRequest().authenticated())
             // H2 콘솔은 CSRF 예외 처리

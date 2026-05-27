@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <!-- 글 본문 -->
+    <h2 th:text="${board.subject}">제목</h2>
+    <div class="board-meta">
+        작성자: <span th:text="${board.author != null ? board.author.username : '-'}">작성자</span>
+        | 작성일: <span th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
+        <span th:if="${board.modifyDate != null}">
+            | 수정일: <span th:text="${#temporals.format(board.modifyDate, 'yyyy-MM-dd HH:mm')}">수정일</span>
+        </span>
+    </div>
+    <div class="board-content" th:text="${board.content}" style="white-space: pre-wrap;">내용</div>
+
+    <!-- 작성자 본인만 수정/삭제 -->
+    <div class="board-actions"
+         th:if="${board.author != null and board.author.username == #authentication.name}">
+        <a th:href="@{|/board/modify/${board.id}|}">수정</a>
+        <form th:action="@{|/board/delete/${board.id}|}" method="post"
+              style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+
+    <p><a th:href="@{/board/list}">목록으로</a></p>
+
+    <hr>
+
+    <!-- 댓글 목록 -->
+    <h3>댓글</h3>
+    <ul class="comment-list">
+        <li th:if="${#lists.isEmpty(board.commentList)}">등록된 댓글이 없습니다.</li>
+        <li th:each="comment : ${board.commentList}">
+            <span th:text="${comment.content}">댓글 내용</span>
+            <span class="comment-meta">
+                - <span th:text="${comment.author != null ? comment.author.username : '-'}">작성자</span>
+                (<span th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}">작성일</span>)
+            </span>
+            <!-- 댓글 작성자 본인만 삭제 -->
+            <form th:if="${comment.author != null and comment.author.username == #authentication.name}"
+                  th:action="@{|/board/comment/delete/${comment.id}|}" method="post"
+                  style="display:inline;" onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+                <button type="submit">삭제</button>
+            </form>
+        </li>
+    </ul>
+
+    <!-- 댓글 작성 (로그인 시) -->
+    <div sec:authorize="isAuthenticated()">
+        <form th:action="@{|/board/comment/create/${board.id}|}" th:object="${commentForm}" method="post">
+            <textarea th:field="*{content}" rows="3" placeholder="댓글을 입력하세요"></textarea>
+            <div class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+            <button type="submit">댓글 등록</button>
+        </form>
+    </div>
+    <div sec:authorize="isAnonymous()">
+        <p><a th:href="@{/user/signin}">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
+    </div>
+</div>
+</body>
+</html>
